@@ -24,9 +24,43 @@ export const loadTopics = (dispatch)=>{
 };
 
 
+export const VIDEOS_REQUEST = 'VIDEOS_REQUEST'
+export const VIDEOS_SUCCESS = 'VIDEOS_SUCCESS'
+export const VIDEOS_FAILURE = 'VIDEOS_FAILURE'
+
+// Fetches a page of starred repos by a particular user.
+// Relies on the custom API middleware defined in ../middleware/api.js.
+// const fetchVideos = (login, nextPageUrl) => ({
+//     login,
+//     [CALL_API]: {
+//         types: [ VIDEOS_REQUEST, VIDEOS_SUCCESS, VIDEOS_FAILURE ],
+//         endpoint: nextPageUrl,
+//         schema: Schemas.ARTICLE_ARRAY
+//     }
+// })
+//
+// // Fetches a page of starred repos by a particular user.
+// // Bails out if page is cached and user didn't specifically request next page.
+// // Relies on Redux Thunk middleware.
+// export const loadVidoes = (topic, nextPage) => (dispatch, getState) => {
+//     const {
+//         nextPageUrl = `/${topic}`,
+//         pageCount = 0
+//     } = getState().pagination.videosByTopic[topic] || {}
+//
+//     if (pageCount > 0 && !nextPage) {
+//         return null
+//     }
+//
+//     return dispatch(loadVidoes(topic, nextPageUrl))
+// }
+
+
 export const RESET_ERROR_MESSAGE = 'RESET_ERROR_MESSAGE'
 
 // Resets the currently visible error message.
 export const resetErrorMessage = () => ({
     type: RESET_ERROR_MESSAGE
 })
+
+

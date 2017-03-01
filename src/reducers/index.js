@@ -29,7 +29,19 @@ const errorMessage = (state = null, action) => {
     return state;
 };
 
+// const pagination = combineReducers({
+//     videosByTopic: paginate({
+//         mapActionToKey: action => action.topic,
+//         types: [
+//             ActionTypes.VIDEOS_REQUEST,
+//             ActionTypes.VIDEOS_SUCCESS,
+//             ActionTypes.VIDEOS_FAILURE
+//         ]
+//     })
+// })
+
 const rootReducer = combineReducers({
+   // pagination,
     entities,
     errorMessage,
     routing
