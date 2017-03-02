@@ -1,24 +1,32 @@
 import React, { Component, PropTypes } from 'react'
 import { connect } from 'react-redux'
 import { browserHistory } from 'react-router'
-import {resetErrorMessage, loadTopics} from '../actions'
-import Select from 'react-select';
+import * as actions from '../actions'
+import Select from 'react-select'
+import 'react-select/dist/react-select.css';
 import {bindActionCreators} from 'redux';
+import values from 'lodash/values';
 class App extends Component {
     static propTypes = {
         // Injected by React Redux //LEARN HOW THIS HAPPENS
         errorMessage: PropTypes.string,
-        resetErrorMessage: PropTypes.func.isRequired,
-        inputValue: PropTypes.string.isRequired,
         // Injected by React Router
         children: PropTypes.node
     }
-
+    state = {selectedTopic: null}
     componentWillMount() {
         this.props.loadTopics()
     }
+    loadVideosByTopic=(val) => {
+        console.log("Selected: " + val.value);
+        this.setState({selectedTopic: val.value},
+            () => {
+                console.log("^^^")
+                this.props.loadVideos(this.state.selectedTopic)
 
-    handleDismissClick = e => {
+            })
+    }
+     handleDismissClick = e => {
         this.props.resetErrorMessage()
         e.preventDefault()
     }
@@ -50,10 +58,10 @@ class App extends Component {
         return (
             <div>
                 <Select
-                                 name="form-field-name"
-                                 value={this.state.selectedTopic}
-                                 options={this.props.topics}
-                                 onChange={this.loadVideosByTopic}
+                    name="form-field-name"
+                    value={this.state.selectedTopic}
+                    options={this.props.topicsForDropdown}
+                    onChange={this.loadVideosByTopic}
                              />
                 <hr />
                 {this.renderErrorMessage()}
@@ -63,13 +71,33 @@ class App extends Component {
     }
 }
 
-const mapStateToProps = (state, ownProps) => ({
-    errorMessage: state.errorMessage,
-    inputValue: ownProps.location.pathname.substring(1)
-})
+const mapStateToProps = (state, ownProps) => {
+    const {
+        entities:{topics, articles}
+    } = state
 
+     const topicsForDropdown = values(topics).map((id) => {
+         return {
+             value: id.topic,
+             label: id.displayName
+         }
+     })
+    return {
+        topicsForDropdown
 
+    }
+}
+const mapDispatchToProps = (dispatch) => {
+     return{
+         loadTopics: function () {
+             return actions.loadTopics(dispatch)
+         },
+         loadVideos: function (topic) {
+             return actions.loadVidoes(topic, dispatch)
+         }
+     }
+ }
 
 export default connect(mapStateToProps,
-    {resetErrorMessage, loadTopics}
+    mapDispatchToProps
 )(App)

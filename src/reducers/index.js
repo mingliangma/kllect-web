@@ -2,6 +2,7 @@ import * as ActionTypes from '../actions'
 import merge from 'lodash/merge'
 import { routerReducer as routing } from 'react-router-redux'
 import { combineReducers } from 'redux'
+import paginate from './paginate'
 
 
 // Updates an entity cache in response to any action with response.entities
@@ -29,19 +30,18 @@ const errorMessage = (state = null, action) => {
     return state;
 };
 
-// const pagination = combineReducers({
-//     videosByTopic: paginate({
-//         mapActionToKey: action => action.topic,
-//         types: [
-//             ActionTypes.VIDEOS_REQUEST,
-//             ActionTypes.VIDEOS_SUCCESS,
-//             ActionTypes.VIDEOS_FAILURE
-//         ]
-//     })
-// })
-
+const pagination = {
+    videosByTopic: paginate({
+        mapActionToKey: action => action.topic,
+        types: [
+            ActionTypes.VIDEOS_REQUEST,
+            ActionTypes.VIDEOS_SUCCESS,
+            ActionTypes.VIDEOS_FAILURE
+        ]
+    })
+}
 const rootReducer = combineReducers({
-   // pagination,
+    pagination,
     entities,
     errorMessage,
     routing

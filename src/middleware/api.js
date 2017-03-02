@@ -17,7 +17,7 @@ const getNextPageUrl = response => {
     return nextLink;
 };
 
-const API_ROOT = ' http://api.app.kllect.com';
+const API_ROOT = ' http://api.app.kllect.com/';
 
 
 // Fetches an API response and normalizes the result JSON according to schema.
