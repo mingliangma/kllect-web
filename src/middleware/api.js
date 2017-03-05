@@ -60,9 +60,7 @@ const topicSchema = new schema.Entity('topics');
 const topicsListSchema = [topicSchema];
 
 
-const articleSchema = new schema.Entity('articles',{
-    owner:topicSchema
-});
+const articleSchema = new schema.Entity('articles');
 const articlesListSchema = {articles: [ articleSchema ]};
 
 export const Schemas = {

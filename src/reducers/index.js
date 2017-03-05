@@ -17,33 +17,9 @@ const entities = (state = { topics: {}, articles: {}}, action ) => {
 
 // Updates error message to notify about the failed fetches.
 
-const errorMessage = (state = null, action) => {
-    const {type, error} = action;
 
-    if(type === ActionTypes.RESET_ERROR_MESSAGE){
-        return null;
-    }
-    else if(error){
-        return error;
-    }
-
-    return state;
-};
-
-const pagination = {
-    videosByTopic: paginate({
-        mapActionToKey: action => action.topic,
-        types: [
-            ActionTypes.VIDEOS_REQUEST,
-            ActionTypes.VIDEOS_SUCCESS,
-            ActionTypes.VIDEOS_FAILURE
-        ]
-    })
-}
 const rootReducer = combineReducers({
-    pagination,
     entities,
-    errorMessage,
     routing
 })
 

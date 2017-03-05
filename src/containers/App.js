@@ -21,10 +21,11 @@ class App extends Component {
         console.log("Selected: " + val.value);
         this.setState({selectedTopic: val.value},
             () => {
-                console.log("^^^")
-                this.props.loadVideos(this.state.selectedTopic)
-
+                console.log(this.state.selectedTopic)
+                this.props.loadVideos(this.state.selectedTopic);
+                console.log("well this got executed too")
             })
+       console.log( this.props.loadVideos(val.value));
     }
      handleDismissClick = e => {
         this.props.resetErrorMessage()
@@ -54,7 +55,7 @@ class App extends Component {
     }
 
     render() {
-        const { children, inputValue } = this.props
+        const { children } = this.props
         return (
             <div>
                 <Select
@@ -87,13 +88,15 @@ const mapStateToProps = (state, ownProps) => {
 
     }
 }
+
 const mapDispatchToProps = (dispatch) => {
      return{
          loadTopics: function () {
              return actions.loadTopics(dispatch)
          },
-         loadVideos: function (topic) {
-             return actions.loadVidoes(topic, dispatch)
+         loadVideos: function(topic)  {
+
+             return actions.loadVideos(topic,dispatch);
          }
      }
  }

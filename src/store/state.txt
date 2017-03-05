@@ -1,0 +1,46 @@
+state : {
+    entities:{
+        topics: {
+            byId:{
+                id1: Object1,
+                id2: Object2,
+                ...
+                }
+            allIds: [id1,id2...]
+        }
+        articles:{
+            byId:{
+
+                id1: Object1,
+                id2: Object2
+                ....
+            }
+            allIds: [id1,id2...]
+
+        }
+
+        articlesPaginatedByTopic:{
+            byId:{
+                topicId1:{
+                    isFetching: boolean,
+                    nextPageUrl: "",
+                    pageCount: x
+                    ids:{
+                        1:[id1,id2.....],
+                        2:[id11,id12...]
+                     }
+                },
+                 topicId2:{
+                    isFetching: boolean,
+                    nextPageUrl: "",
+                    pageCount: x
+                    ids:{
+                        1:[id1,id2.....],
+                        2:[id11,id12...]
+                     }
+                }
+            }
+            allIds: [topicId1,topicId2 ...]
+        }
+    }
+}
