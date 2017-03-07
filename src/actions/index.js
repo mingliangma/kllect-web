@@ -89,28 +89,39 @@ export const TOPICS_FAILURE = 'TOPICS_FAILURE';
 //
 // }
 //when i kept in this form getstate is not accessible
-export const loadTopics = (dispatch, getState)=>{
-    //why is getState() not accessible ??
-    console.log(getState)
-   //  let {topics} = getState().entities.topics;
-    // if(topics){
-    //     console.log(topics);
-    //     //There is cached data! Don't do anything!!
-    //     return;
-    // }
-    dispatch({
-        type: TOPICS_REQUEST
-    })
-    callApi('http://api.app.kllect.com/topics', Schemas.TOPIC_ARRAY).then(
-        response => dispatch({
-            type: TOPICS_SUCCESS,
-            response
-        }),
-        error => dispatch({
-            type: TOPICS_FAILURE,
-            error
-        })
-    );
+export const loadTopics = () => {
+  return (dispatch, getState) => {
+    console.log('loadTopics - getState -> ', getState);
+
+    dispatch({ type: TOPICS_REQUEST });
+    callApi('http://api.app.kllect.com/topics', Schemas.TOPIC_ARRAY)
+      .then(
+        response => dispatch({ type: TOPICS_SUCCESS, response }),
+        error => dispatch({ type: TOPICS_FAILURE, error })
+      );
+  };
+
+  //   //why is getState() not accessible ??
+  //   console.log(getState)
+  //  //  let {topics} = getState().entities.topics;
+  //   // if(topics){
+  //   //     console.log(topics);
+  //   //     //There is cached data! Don't do anything!!
+  //   //     return;
+  //   // }
+  //   dispatch({
+  //       type: TOPICS_REQUEST
+  //   })
+  //   callApi('http://api.app.kllect.com/topics', Schemas.TOPIC_ARRAY).then(
+  //       response => dispatch({
+  //           type: TOPICS_SUCCESS,
+  //           response
+  //       }),
+  //       error => dispatch({
+  //           type: TOPICS_FAILURE,
+  //           error
+  //       })
+  //   );
 };
 
 
@@ -120,28 +131,29 @@ export const VIDEOS_SUCCESS = 'VIDEOS_SUCCESS';
 export const VIDEOS_FAILURE = 'VIDEOS_FAILURE';
 
 export const loadVideos = (topic) => {
-    console.log("in loadVideos");
-   return (dispatch, getState) => {
+   console.log("in loadVideos");
 
-        console.log("in dispatch");
-       dispatch({
-           type: VIDEOS_REQUEST,
-           topic
+   return (dispatch, getState) => {
+     console.log("in dispatch");
+     dispatch({
+       type: VIDEOS_REQUEST,
+       topic
+     });
+
+     callApi(`http://api.app.kllect.com/topic/{topic}`, Schemas.ARTICLE_ARRAY).then(
+       response => dispatch({
+         type: VIDEOS_SUCCESS,
+         topic,
+         response
+       }),
+       error => dispatch({
+         type: VIDEOS_FAILURE,
+         topic,
+         error
        })
-        callApi(`http://api.app.kllect.com/topic/{topic}`, Schemas.ARTICLE_ARRAY).then(
-            response => dispatch({
-                type: VIDEOS_SUCCESS,
-                topic,
-                response
-            }),
-            error => dispatch({
-                type: VIDEOS_FAILURE,
-                topic,
-                error
-            })
-        );
-    }
-}
+    );
+  };
+};
 
 
 //
@@ -173,5 +185,3 @@ export const loadVideos = (topic) => {
 //         schema: Schemas.ARTICLE_ARRAY
 //     }
 // })
-
-

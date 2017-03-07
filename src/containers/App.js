@@ -17,23 +17,24 @@ class App extends Component {
     componentWillMount() {
         this.props.loadTopics()
     }
-    loadVideosByTopic=(val) => {
-        console.log("Selected: " + val.value);
-        this.setState({selectedTopic: val.value},
-            () => {
-                console.log(this.state.selectedTopic)
-                this.props.loadVideos(this.state.selectedTopic);
-                console.log("well this got executed too")
-            })
-       console.log( this.props.loadVideos(val.value));
+
+    loadVideosByTopic = val => {
+      console.log("Selected: " + val.value);
+      // this.props.loadVideos(val.value);
+
+      this.setState({selectedTopic: val.value}, () => {
+        console.log('selected topic (after component setstate: ', this.state.selectedTopic)
+        this.props.loadVideos(this.state.selectedTopic);
+      });
     }
-     handleDismissClick = e => {
-        this.props.resetErrorMessage()
-        e.preventDefault()
+
+    handleDismissClick = e => {
+      this.props.resetErrorMessage();
+      e.preventDefault();
     }
 
     handleChange = nextValue => {
-        browserHistory.push(`/${nextValue}`)
+      browserHistory.push(`/${nextValue}`);
     }
 
     renderErrorMessage() {
@@ -73,34 +74,27 @@ class App extends Component {
 }
 
 const mapStateToProps = (state, ownProps) => {
-    const {
-        entities:{topics, articles}
-    } = state
+    const { entities: { topics, articles } } = state;
 
-     const topicsForDropdown = values(topics).map((id) => {
-         return {
-             value: id.topic,
-             label: id.displayName
-         }
-     })
-    return {
-        topicsForDropdown
+    const topicsForDropdown = values(topics).map((id) => {
+      return {
+        value: id.topic,
+        label: id.displayName
+      }
+    });
 
-    }
+    return { topicsForDropdown };
 }
 
 const mapDispatchToProps = (dispatch) => {
-     return{
-         loadTopics: function () {
-             return actions.loadTopics(dispatch)
-         },
-         loadVideos: function(topic)  {
+  return {
+    loadTopics: function () {
+      return dispatch(actions.loadTopics());
+    },
+    loadVideos: function(topic)  {
+      return dispatch(actions.loadVideos(topic));
+    }
+  };
+};
 
-             return actions.loadVideos(topic,dispatch);
-         }
-     }
- }
-
-export default connect(mapStateToProps,
-    mapDispatchToProps
-)(App)
+export default connect(mapStateToProps, mapDispatchToProps)(App);
