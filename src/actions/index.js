@@ -2,15 +2,17 @@ import { normalize, schema } from 'normalizr'
 import { camelizeKeys } from 'humps'
 
 const getNextPageUrl = response => {
-    const link = response.body.nextPagePath;
-    const countArticles = response.body.articleCount;
+    console.log("in getNextPageUrl" )
+    const link = response.nextPagePath;
+    console.log(response.body)
+    const countArticles = response.articleCount;
     if(countArticles < 10) return null;
     if (!link) {
         return null
     }
 
     const nextLink = link.split('offset=')[1];
-
+    console.log(link.split('offset='));
     return nextLink;
 };
 
@@ -20,6 +22,8 @@ const topicsListSchema = [topicSchema];
 
 
 const articleSchema = new schema.Entity('articles');
+
+
 const articlesListSchema = {articles: [ articleSchema ]};
 
 const Schemas = {
@@ -42,7 +46,7 @@ const callApi = (endpoint, schema) => {
                 }
 
                 const camelizedJson = camelizeKeys(json)
-                const nextPageUrl = getNextPageUrl(response)
+                const nextPageUrl = getNextPageUrl(json)
 
                 return Object.assign({},
                     normalize(camelizedJson, schema),
@@ -61,67 +65,18 @@ export const TOPICS_FAILURE = 'TOPICS_FAILURE';
 
 
 
-//when i kept in this form results are not even populated is not accessible
-//
-// export function loadTopics() {
-//     return function (dispatch,getState) {
-//         console.log(getState)
-//         let {topics} = getState().entities.topics;
-//         if(topics){
-//             console.log(topics);
-//             //There is cached data! Don't do anything!!
-//             return topics;
-//         }
-//         callApi('http://api.app.kllect.com/topics', Schemas.TOPIC_ARRAY).then(
-//             response => dispatch({
-//                 type: TOPICS_SUCCESS,
-//                 response
-//             }),
-//             error => dispatch({
-//                 type: TOPICS_FAILURE,
-//                 error
-//             })
-//         );
-//
-//
-//
-//     }
-//
-// }
-//when i kept in this form getstate is not accessible
 export const loadTopics = () => {
   return (dispatch, getState) => {
-    console.log('loadTopics - getState -> ', getState);
 
     dispatch({ type: TOPICS_REQUEST });
     callApi('http://api.app.kllect.com/topics', Schemas.TOPIC_ARRAY)
       .then(
-        response => dispatch({ type: TOPICS_SUCCESS, response }),
+        payload => dispatch({ type: TOPICS_SUCCESS, payload }),
         error => dispatch({ type: TOPICS_FAILURE, error })
       );
   };
 
-  //   //why is getState() not accessible ??
-  //   console.log(getState)
-  //  //  let {topics} = getState().entities.topics;
-  //   // if(topics){
-  //   //     console.log(topics);
-  //   //     //There is cached data! Don't do anything!!
-  //   //     return;
-  //   // }
-  //   dispatch({
-  //       type: TOPICS_REQUEST
-  //   })
-  //   callApi('http://api.app.kllect.com/topics', Schemas.TOPIC_ARRAY).then(
-  //       response => dispatch({
-  //           type: TOPICS_SUCCESS,
-  //           response
-  //       }),
-  //       error => dispatch({
-  //           type: TOPICS_FAILURE,
-  //           error
-  //       })
-  //   );
+
 };
 
 
@@ -131,7 +86,6 @@ export const VIDEOS_SUCCESS = 'VIDEOS_SUCCESS';
 export const VIDEOS_FAILURE = 'VIDEOS_FAILURE';
 
 export const loadVideos = (topic) => {
-   console.log("in loadVideos");
 
    return (dispatch, getState) => {
      console.log("in dispatch");
@@ -139,12 +93,11 @@ export const loadVideos = (topic) => {
        type: VIDEOS_REQUEST,
        topic
      });
-
-     callApi(`http://api.app.kllect.com/topic/{topic}`, Schemas.ARTICLE_ARRAY).then(
-       response => dispatch({
+     callApi(`http://api.app.kllect.com/articles/topic/${topic}`, Schemas.ARTICLE_ARRAY).then(
+       payload => dispatch({
          type: VIDEOS_SUCCESS,
          topic,
-         response
+         payload
        }),
        error => dispatch({
          type: VIDEOS_FAILURE,
@@ -156,32 +109,3 @@ export const loadVideos = (topic) => {
 };
 
 
-//
-// export function loadVideos(topic) {
-//     console.log("in loadVideos" + topic);
-//     return function (dispatch, getState) {
-//         console.log("in loadVideos");
-//         callApi(`http://api.app.kllect.com/topic/{topic}`, Schemas.ARTICLE_ARRAY).then(
-//             response => dispatch({
-//                 type: VIDEOS_SUCCESS,
-//                 response
-//             }),
-//             error => dispatch({
-//                 type: VIDEOS_FAILURE,
-//                 error
-//             })
-//         );
-//     }
-// }
-
-
-
-// Fetches a page of videos by a particular topic.
-// Relies on the custom API middleware defined in ../middleware/api.js.
-// const fetchVideos = (topic, nextPageUrl) => ({
-//     [CALL_API]: {
-//         types: [ VIDEOS_REQUEST, VIDEOS_SUCCESS, VIDEOS_FAILURE ],
-//         endpoint: nextPageUrl,
-//         schema: Schemas.ARTICLE_ARRAY
-//     }
-// })
