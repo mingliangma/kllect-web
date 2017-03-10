@@ -1,37 +1,57 @@
-
+import initialState from './initialState';
 import union from 'lodash/union';
 import * as actionTypes from '../actions';
 
-function updatePagination(state = {
+
+const paginate = (state = initialState.articlesPaginatedByTopic, action) => {
+
+    const updatePagination=(state = {
         nextPageUrl: undefined,
         pageCount: 0,
-        ids: []
-    },  payload) {
-    const {result} = payload;
-    const {articles,articleCount,nextPageUrl } = result;
+        ids: [],
+        },action)=>{
+        switch(action.type){
+            case actionTypes.VIDEOS_REQUEST:
+                return {
+                    ...state,
+                    isFetching: true
+                };
+            case actionTypes.VIDEOS_SUCCESS:
+                return{
+                    ...state,
+                    isFetching:false,
+                    ids: union(state.ids, action.payload.result.articles), //or action.payload.result.articles ?
+                    nextPageUrl:action.payload.nextPageUrl,
+                    pageCount: state.pageCount +1
+                };
+            case actionTypes.VIDEOS_FAILURE:
+                return{
+                    ...state,
+                    isFetching:false
+                };
+            default:
+                return state
+        }
 
-    return {
-        ...state,
-        ids: union(state.ids, articles),
-        nextPageUrl,
-        pageCount: state.pageCount+1
+    };
 
-    }
-
-}
-
-function paginate(state={}, action) {
-    const {topic, payload} = action;
-    switch(action.type){
+    switch (action.type){
+        case actionTypes.VIDEOS_REQUEST:
         case actionTypes.VIDEOS_SUCCESS:
-            return{
+        case actionTypes.VIDEOS_FAILURE:
+            const {topic,payload} = action;
+            return {
                 ...state,
-                articlesPaginatedByTopic: {
-                    ...state[articlesPaginatedByTopic],
-                    [topic]:updatePagination(state[topic][articlesPaginatedByTopic],payload)
-                }
+                [topic]: updatePagination(state[topic], action)
+            };
+        default:
+            return state;
             }
-    }
-}
+};
 
-export default paginate;
+
+
+ export default paginate;
+
+
+

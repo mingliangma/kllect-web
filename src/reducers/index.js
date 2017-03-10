@@ -3,10 +3,12 @@ import merge from 'lodash/merge';
 import { routerReducer as routing } from 'react-router-redux';
 import { combineReducers } from 'redux';
 import paginate from './paginate';
+import initialState from './initialState';
+
 
 // Updates an entity cache in response to any action with response.entities
 
-const entities = (state = { topics: {}, articles: {}}, action ) => {
+const entities = (state  = initialState.entities, action ) => {
     if(action.payload && action.payload.entities){
         return merge({}, state, action.payload.entities)
     }
