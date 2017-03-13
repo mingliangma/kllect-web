@@ -5,6 +5,11 @@ export default {
     },
     articlesPaginatedByTopic:{
 
+    },
+
+    currentSelectedTopic:{
+
     }
+
 
 }

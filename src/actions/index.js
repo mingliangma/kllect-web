@@ -1,6 +1,9 @@
 import { normalize, schema } from 'normalizr'
 import { camelizeKeys } from 'humps'
 
+
+const API_ROOT = 'http://api.app.kllect.com/';
+
 const getNextPageUrl = response => {
     console.log("in getNextPageUrl" )
     const link = response.nextPagePath;
@@ -11,8 +14,8 @@ const getNextPageUrl = response => {
         return null
     }
 
-    const nextLink = link.split('offset=')[1];
-    console.log(link.split('offset='));
+    const nextLink = API_ROOT+link;
+    console.log(nextLink);
     return nextLink;
 };
 
@@ -88,12 +91,16 @@ export const VIDEOS_FAILURE = 'VIDEOS_FAILURE';
 export const loadVideos = (topic) => {
 
    return (dispatch, getState) => {
-     console.log("in dispatch");
+       const{
+           nextPageUrl=`${API_ROOT}articles/topic/${topic}`,
+           pageCount=0
+       } = getState().paginate[topic] || {}
+     console.log("in dispatch" + nextPageUrl + " - " + pageCount);
      dispatch({
        type: VIDEOS_REQUEST,
        topic
      });
-     callApi(`http://api.app.kllect.com/articles/topic/${topic}`, Schemas.ARTICLE_ARRAY).then(
+     callApi(nextPageUrl, Schemas.ARTICLE_ARRAY).then(
        payload => dispatch({
          type: VIDEOS_SUCCESS,
          topic,

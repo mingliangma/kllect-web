@@ -1,4 +1,4 @@
-import * as ActionTypes from '../actions';
+import * as actionTypes from '../actions';
 import merge from 'lodash/merge';
 import { routerReducer as routing } from 'react-router-redux';
 import { combineReducers } from 'redux';
@@ -16,13 +16,25 @@ const entities = (state  = initialState.entities, action ) => {
     return state;
 };
 
+const currentSelectedTopic = (state = initialState.currentSelectedTopic, action) => {
+    if (action.type ==actionTypes.VIDEOS_REQUEST) {
+        const {topic} = action;
+        return topic;
+    }
+    else return state;
+
+
+};
+
+
 // Updates error message to notify about the failed fetches.
 
 
 const rootReducer = combineReducers({
     paginate,
     entities,
-    routing
+    routing,
+    currentSelectedTopic
 })
 
 export default rootReducer

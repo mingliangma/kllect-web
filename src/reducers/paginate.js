@@ -47,7 +47,7 @@ const paginate = (state = initialState.articlesPaginatedByTopic, action) => {
         default:
             return state;
             }
-};
+    };
 
 
 
