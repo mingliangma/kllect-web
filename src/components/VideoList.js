@@ -8,11 +8,18 @@ export default class VideoList extends Component{
         onLoadMoreClick: PropTypes.func,
     }
 
-
     videoItems = this.props.items.map((video) => {
-        return <VideoItem key={video.id} article={video}/>
+        return <VideoItem key={video.id} article={video.articleUrl}/>
     });
 
+    renderVideoItems(){
+        const {items} = this.props;
+        return items.map((video) => {
+            return <VideoItem key={video.id} article={video}/>
+        });
+
+
+    }
     renderLoadMore() {
         const isFetching=false;
         const {  onLoadMoreClick } = this.props;
@@ -28,7 +35,7 @@ export default class VideoList extends Component{
         return (
             <div>
             <ul className="media-list">
-                {this.videoItems}
+                {this.renderVideoItems()}
 
             </ul>
                 {this.renderLoadMore()}

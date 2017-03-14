@@ -88,17 +88,19 @@ const mapStateToProps = (state, ownProps) => {
         }
     });
 
-      const articlesInArray = values(articles).map((articles) => {
-          return{
-            articleUrl: articles.articleUrl,
-              title: articles.title,
-              id:articles.id
-          }
-      });
+      // const articlesInArray = values(articles).map((articles) => {
+      //     return{
+      //       articleUrl: articles.articleUrl,
+      //         title: articles.title,
+      //         id:articles.id
+      //     }
+      // });
 
-      const pagination = paginate[currentSelectedTopic] || { ids: [] }
+      const pagination = paginate[currentSelectedTopic] || {nextPageUrl:'', pageCount:0, ids:[], isFetching:false}
 
-
+        const articlesInArray = pagination.ids.map((article) => {
+          return articles[article];
+        })
     return { topicsForDropdown, articlesInArray, currentSelectedTopic, pagination};
 }
 
