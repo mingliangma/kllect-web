@@ -69,7 +69,7 @@ class App extends Component {
                              />
                 <hr />
                 {this.renderErrorMessage()}
-                <VideoList items={this.props.articlesInArray} onLoadMoreClick={this.handleLoadMoreClick}/>
+                <VideoList items={this.props.articlesInArray} onLoadMoreClick={this.handleLoadMoreClick} {...this.props.pagination}/>
 
             </div>
         )
@@ -88,13 +88,7 @@ const mapStateToProps = (state, ownProps) => {
         }
     });
 
-      // const articlesInArray = values(articles).map((articles) => {
-      //     return{
-      //       articleUrl: articles.articleUrl,
-      //         title: articles.title,
-      //         id:articles.id
-      //     }
-      // });
+
 
       const pagination = paginate[currentSelectedTopic] || {nextPageUrl:'', pageCount:0, ids:[], isFetching:false}
 
@@ -116,14 +110,3 @@ const mapDispatchToProps = (dispatch) => {
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(App);
-
-/*
- <List items = {this.props.pagination.ids}
- onLoadMoreClick={this.handleLoadMoreClick()}
- loadingLabel={'Loading '}
- nextPageUrl={this.props.pagination.nextPageUrl}
- isFetching={this.props.pagination.isFetching}
- pageCount={this.props.pagination.pageCount}
- />
- />
- */
