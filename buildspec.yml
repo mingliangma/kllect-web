@@ -3,7 +3,7 @@ version: 0.1
 phases:
   build:
     commands:
-      - nvm current && npm install && npm run build
+      - npm install && npm run build
 
 artifacts:
   files:
